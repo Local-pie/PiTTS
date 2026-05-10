@@ -29,7 +29,7 @@ metadata:
   namespace: tts-frontend-prd
 spec:
   selector:
-    app: tts-frontend
+    app: tts-frontend-pod
   ports:
     - port: 80
       targetPort: 8080
