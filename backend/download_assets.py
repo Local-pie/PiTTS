@@ -6,8 +6,8 @@ MODELS_DIR = "models"
 os.makedirs(MODELS_DIR, exist_ok=True)
 
 # 1. Download Piper Linux binary
-# Using the stable 2023.11.14-2 release for linux x86_64
-piper_url = "https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_x86_64.tar.gz"
+# Using the stable 2023.11.14-2 release for linux aarch64 (Raspberry Pi)
+piper_url = "https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_aarch64.tar.gz"
 piper_tar = os.path.join(MODELS_DIR, "piper.tar.gz")
 
 print("Downloading Piper Linux binary...")
