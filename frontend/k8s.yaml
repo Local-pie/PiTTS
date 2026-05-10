@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tts-frontend-prd
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tts-frontend
+  namespace: tts-frontend-prd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tts-frontend-pod
+  template:
+    metadata:
+      labels:
+        app: tts-frontend-pod
+    spec:
+      containers:
+        - name: tts-frontend-img
+          image: ghcr.io/local-pie/tts-frontend:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tts-frontend-service
+  namespace: tts-frontend-prd
+spec:
+  selector:
+    app: tts-frontend
+  ports:
+    - port: 80
+      targetPort: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tts-frontend-ingress
+  namespace: tts-frontend-prd
+spec:
+  rules:
+    - host: pi-tts.home.arpa
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            frontend:
+              service:
+                name: tts-frontend-service
+                port:
+                  number: 80

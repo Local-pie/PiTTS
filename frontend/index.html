@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PiTTS - Fast Text to Speech</title>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
+        .form-group { margin-bottom: 20px; }
+        textarea { width: 100%; height: 120px; padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ccc; }
+        select, input[type="range"] { width: 100%; padding: 8px; }
+        button { background: #007bff; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 8px; cursor: pointer; width: 100%; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #audioContainer { margin-top: 20px; text-align: center; }
+        #status { font-size: 14px; color: #666; margin-top: 10px; text-align: center; height: 20px; }
+    </style>
+</head>
+<body>
+    <h2>PiTTS 🗣️</h2>
+    
+    <div class="form-group">
+        <label>Text to speak:</label>
+        <textarea id="textInput" placeholder="Enter some text here..."></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Voice Type:</label>
+        <select id="voiceSelect">
+            <option value="en_US-lessac-medium">English US - Lessac (Medium)</option>
+            <option value="en_US-amy-medium">English US - Amy (Medium)</option>
+            <option value="fr_FR-siwis-medium">French - Siwis (Medium)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Speed : <span id="speedVal">1.0</span></label>
+        <input type="range" id="speedInput" min="0.5" max="2.0" step="0.1" value="1.0">
+    </div>
+
+    <button id="generateBtn">Generate Audio</button>
+    <div id="status"></div>
+
+    <div id="audioContainer">
+        <audio id="audioPlayer" controls style="display: none; width: 100%;"></audio>
+    </div>
+
+    <script>
+        const textInput = document.getElementById('textInput');
+        const voiceSelect = document.getElementById('voiceSelect');
+        const speedInput = document.getElementById('speedInput');
+        const speedVal = document.getElementById('speedVal');
+        const generateBtn = document.getElementById('generateBtn');
+        const statusText = document.getElementById('status');
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        speedInput.addEventListener('input', (e) => {
+            speedVal.textContent = e.target.value;
+        });
+
+        generateBtn.addEventListener('click', async () => {
+            const text = textInput.value.trim();
+            if (!text) return;
+
+            generateBtn.disabled = true;
+            statusText.textContent = "Generating... (Might take a few seconds if pod is asleep)";
+            audioPlayer.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/tts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: text,
+                        voice: voiceSelect.value,
+                        speed: parseFloat(speedInput.value)
+                    })
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                // Get audio file as a Blob and play it directly
+                const blob = await response.blob();
+                const audioUrl = URL.createObjectURL(blob);
+                
+                audioPlayer.src = audioUrl;
+                audioPlayer.style.display = 'block';
+                audioPlayer.play();
+                statusText.textContent = "Done!";
+                
+            } catch (error) {
+                console.error("Error:", error);
+                statusText.textContent = "Error generating audio: " + error.message;
+            } finally {
+                generateBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

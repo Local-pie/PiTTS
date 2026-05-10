@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tts-backend-prd
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tts-backend
+  namespace: tts-backend-prd
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: tts-backend-pod
+  template:
+    metadata:
+      labels:
+        app: tts-backend-pod
+    spec:
+      containers:
+        - name: tts-backend-img
+          image: ghcr.io/local-pie/tts-backend:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tts-backend-service
+  namespace: tts-backend-prd
+spec:
+  selector:
+    app: tts-backend
+  ports:
+    - port: 80
+      targetPort: 8000
+---
+kind: HTTPScaledObject
+apiVersion: http.keda.sh/v1alpha1
+metadata:
+  name: tts-backend-scaler
+  namespace: tts-backend-prd
+spec:
+  hosts: 
+    - tts-backend.internal
+  scaleTargetRef:
+    name: tts-backend
+    kind: Deployment
+    apiVersion: apps/v1
+    service: tts-backend-service
+    port: 80
+  replicas:
+    min: 0
+    max: 1
