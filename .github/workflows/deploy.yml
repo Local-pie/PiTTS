@@ -35,8 +35,8 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: |
-            ghcr.io/local-pie/tts-frontend:latest:${{ github.sha }}
-            ghcr.io/local-pie/tts-frontend:latest:prd
+            ghcr.io/local-pie/tts-frontend:${{ github.sha }}
+            ghcr.io/local-pie/tts-frontend:prd
           cache-from: type=gha
           cache-to: type=gha,mode=min
 
@@ -47,8 +47,8 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: |
-            ghcr.io/local-pie/tts-backend:latest:${{ github.sha }}
-            ghcr.io/local-pie/tts-backend:latest:prd
+            ghcr.io/local-pie/tts-backend:${{ github.sha }}
+            ghcr.io/local-pie/tts-backend:prd
           cache-from: type=gha
           cache-to: type=gha,mode=min
           
