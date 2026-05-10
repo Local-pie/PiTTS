@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: tts-backend-img
-          image: ghcr.io/local-pie/tts-backend:latest
+          image: ghcr.io/local-pie/tts-backend:prd
 ---
 apiVersion: v1
 kind: Service
