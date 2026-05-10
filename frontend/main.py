@@ -28,7 +28,7 @@ async def proxy_tts(req: TTSRequest):
             # We set a slightly longer timeout to account for Knative Cold Starts
             # The very first request might take 3-5s if the pod was scaled to zero!
             response = await client.post(
-                f"http://keda-http-add-on-interceptor-proxy.keda.svc.cluster.local:8080/generate", 
+                f"http://keda-add-ons-http-interceptor-proxy.keda.svc.cluster.local:8080/generate", 
                 json=req.model_dump(),
                 headers={"Host": "tts-backend.internal"},
                 timeout=30.0
