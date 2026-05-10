@@ -29,10 +29,10 @@ metadata:
   namespace: tts-backend-prd
 spec:
   selector:
-    app: tts-backend
+    app: tts-backend-pod
   ports:
     - port: 80
-      targetPort: 8080
+      targetPort: 8000
 ---
 kind: HTTPScaledObject
 apiVersion: http.keda.sh/v1alpha1
