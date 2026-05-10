@@ -46,7 +46,7 @@ spec:
         paths:
           - path: /
             pathType: Prefix
-            frontend:
+            backend:
               service:
                 name: tts-frontend-service
                 port:
