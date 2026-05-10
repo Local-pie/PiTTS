@@ -1,14 +1,13 @@
 FROM python:3.10-slim
 
-WORKDIR /app
-
 # 1. Install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 2. Copy the pre-downloaded models and piper binary
-# (We assume download_assets.py has been run locally first)
-COPY models /models
+COPY download_assets.py .
+RUN python download_assets.py
+RUN ls -la
 
 # Add the extracted Piper binary to the system PATH
 # Note: The tar extraction creates a subfolder called "piper"
