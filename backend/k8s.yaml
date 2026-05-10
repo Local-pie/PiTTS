@@ -32,7 +32,7 @@ spec:
     app: tts-backend
   ports:
     - port: 80
-      targetPort: 8000
+      targetPort: 8080
 ---
 kind: HTTPScaledObject
 apiVersion: http.keda.sh/v1alpha1
