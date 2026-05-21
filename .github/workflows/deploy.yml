@@ -28,8 +28,8 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: |
-            zot.local/tts-frontend:${{ github.sha }}
-            zot.local/tts-frontend:prd
+            zot.home.arpa/tts-frontend:${{ github.sha }}
+            zot.home.arpa/tts-frontend:prd
           cache-from: type=gha
           cache-to: type=gha,mode=min
 
@@ -40,8 +40,8 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: |
-            zot.local/tts-backend:${{ github.sha }}
-            zot.local/tts-backend:prd
+            zot.home.arpa/tts-backend:${{ github.sha }}
+            zot.home.arpa/tts-backend:prd
           cache-from: type=gha
           cache-to: type=gha,mode=min
           
