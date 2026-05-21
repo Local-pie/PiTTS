@@ -22,9 +22,8 @@ jobs:
         uses: docker/setup-buildx-action@v3
         with:
           config-inline: |
-            [registry."zot.home.arpa:80"]
+            [registry."zot.zot.svc.cluster.local:5000"]
               http = true
-              insecure = true
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -33,8 +32,8 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: |
-            zot.home.arpa:80/tts-frontend:${{ github.sha }}
-            zot.home.arpa:80/tts-frontend:prd
+            zot.zot.svc.cluster.local:5000/tts-frontend:${{ github.sha }}
+            zot.zot.svc.cluster.local:5000/tts-frontend:prd
           cache-from: type=gha
           cache-to: type=gha,mode=min
 
@@ -45,8 +44,8 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: |
-            zot.home.arpa:80/tts-backend:${{ github.sha }}
-            zot.home.arpa:80/tts-backend:prd
+            zot.zot.svc.cluster.local:5000/tts-backend:${{ github.sha }}
+            zot.zot.svc.cluster.local:5000/tts-backend:prd
           cache-from: type=gha
           cache-to: type=gha,mode=min
           
