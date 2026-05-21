@@ -13,6 +13,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
 
     steps:
       - name: Checkout
@@ -38,6 +39,7 @@ jobs:
           cache-to: type=registry,ref=zot.zot.svc.cluster.local:5000/tts-frontend:buildcache,mode=max
 
       - name: Build and push
+        id: build-backend
         uses: docker/build-push-action@v5
         with:
           context: backend
@@ -48,7 +50,19 @@ jobs:
             zot.zot.svc.cluster.local:5000/tts-backend:prd
           cache-from: type=registry,ref=zot.zot.svc.cluster.local:5000/tts-backend:buildcache
           cache-to: type=registry,ref=zot.zot.svc.cluster.local:5000/tts-backend:buildcache,mode=max
-          
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3.5.0
+
+      - name: Sign images with Cosign
+        run: |
+          # Disable transparency log and explicitly bypass TLS since we are using internal HTTP routing
+          export COSIGN_EXPERIMENTAL=1
+          export COSIGN_YES=true
+          export TLS_INSECURE_SKIP_VERIFY=true
+          cosign sign --yes zot.zot.svc.cluster.local:5000/tts-frontend:${{ github.sha }}
+          cosign sign --yes zot.zot.svc.cluster.local:5000/tts-backend:${{ github.sha }}
+
       - name: Deploy
         run: |
             kubectl apply -f backend/k8s.yaml
