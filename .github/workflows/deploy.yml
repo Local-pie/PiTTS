@@ -55,13 +55,12 @@ jobs:
         uses: sigstore/cosign-installer@v3.5.0
 
       - name: Sign images with Cosign
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         run: |
-          # Disable transparency log and explicitly bypass TLS since we are using internal HTTP routing
-          export COSIGN_EXPERIMENTAL=1
-          export COSIGN_YES=true
           export TLS_INSECURE_SKIP_VERIFY=true
-          cosign sign --yes zot.zot.svc.cluster.local:5000/tts-frontend:${{ github.sha }}
-          cosign sign --yes zot.zot.svc.cluster.local:5000/tts-backend:${{ github.sha }}
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY zot.zot.svc.cluster.local:5000/tts-frontend:${{ github.sha }}
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY zot.zot.svc.cluster.local:5000/tts-backend:${{ github.sha }}
 
       - name: Deploy
         run: |
