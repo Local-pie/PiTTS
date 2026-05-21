@@ -34,8 +34,8 @@ jobs:
           tags: |
             zot.zot.svc.cluster.local:5000/tts-frontend:${{ github.sha }}
             zot.zot.svc.cluster.local:5000/tts-frontend:prd
-          cache-from: type=gha
-          cache-to: type=gha,mode=min
+          cache-from: type=registry,ref=zot.zot.svc.cluster.local:5000/tts-frontend:buildcache
+          cache-to: type=registry,ref=zot.zot.svc.cluster.local:5000/tts-frontend:buildcache,mode=max
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -46,8 +46,8 @@ jobs:
           tags: |
             zot.zot.svc.cluster.local:5000/tts-backend:${{ github.sha }}
             zot.zot.svc.cluster.local:5000/tts-backend:prd
-          cache-from: type=gha
-          cache-to: type=gha,mode=min
+          cache-from: type=registry,ref=zot.zot.svc.cluster.local:5000/tts-backend:buildcache
+          cache-to: type=registry,ref=zot.zot.svc.cluster.local:5000/tts-backend:buildcache,mode=max
           
       - name: Deploy
         run: |
