@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: tts-frontend-img
-          image: zot.home.arpa/tts-frontend:prd
+          image: zot.home.arpa:80/tts-frontend:prd
 ---
 apiVersion: v1
 kind: Service
