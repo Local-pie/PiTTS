@@ -21,13 +21,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -35,8 +28,8 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: |
-            ghcr.io/local-pie/tts-frontend:${{ github.sha }}
-            ghcr.io/local-pie/tts-frontend:prd
+            zot.local/tts-frontend:${{ github.sha }}
+            zot.local/tts-frontend:prd
           cache-from: type=gha
           cache-to: type=gha,mode=min
 
@@ -47,8 +40,8 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: |
-            ghcr.io/local-pie/tts-backend:${{ github.sha }}
-            ghcr.io/local-pie/tts-backend:prd
+            zot.local/tts-backend:${{ github.sha }}
+            zot.local/tts-backend:prd
           cache-from: type=gha
           cache-to: type=gha,mode=min
           
