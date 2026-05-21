@@ -57,6 +57,7 @@ jobs:
       - name: Sign images with Cosign
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD || '' }}
         run: |
           export TLS_INSECURE_SKIP_VERIFY=true
           cosign sign --yes --key env://COSIGN_PRIVATE_KEY zot.zot.svc.cluster.local:5000/tts-frontend:${{ github.sha }}
